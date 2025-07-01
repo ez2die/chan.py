@@ -1,0 +1,18 @@
+{
+  "model_type": "xgb",
+  "model_tag": "btc_1h_20250701",
+  "xgb_params": {
+    "max_depth": 6,
+    "eta": 0.1,
+    "objective": "binary:logistic",
+    "eval_metric": "auc",
+    "subsample": 0.8,
+    "colsample_bytree": 0.8,
+    "min_child_weight": 1,
+    "reg_alpha": 0.1,
+    "reg_lambda": 1.0,
+    "random_state": 42
+  },
+  "num_features": 399,
+  "feature_names": null
+}
