@@ -31,7 +31,13 @@ class CXGBModelGenerator(CModelGenerator):
     
     def __init__(self, model_tag: str, xgb_params: Dict = None):
         super().__init__('xgb', model_tag)
-        self.xgb_params = xgb_params or self._get_default_params()
+        base = self._get_default_params()
+        if xgb_params:
+            base.update(xgb_params)
+        # xgboost.train 使用 'eta' 作为学习率；若提供 learning_rate 则映射
+        if 'learning_rate' in base:
+            base['eta'] = base.pop('learning_rate')
+        self.xgb_params = base
         self.model = None
         self.feature_names = None
         
@@ -67,13 +73,14 @@ class CXGBModelGenerator(CModelGenerator):
         """训练XGBoost模型"""
         evals = [(train_set.data, 'train'), (test_set.data, 'eval')]
         
+        num_rounds = self.xgb_params.pop('n_estimators', 400)
         self.model = xgb.train(
             params=self.xgb_params,
             dtrain=train_set.data,
-            num_boost_round=100,
+            num_boost_round=num_rounds,
             evals=evals,
-            early_stopping_rounds=10,
-            verbose_eval=10
+            early_stopping_rounds=50,
+            verbose_eval=20
         )
         
     def predict(self, dataset: CXGBDataSet) -> List[float]:
@@ -82,6 +89,7 @@ class CXGBModelGenerator(CModelGenerator):
             raise ValueError("模型未训练")
             
         predictions = self.model.predict(dataset.data)
+        # 如果为多分类 softprob，将 shape (n, num_class) 转 list；否则为 1D
         return predictions.tolist()
         
     def save_model(self) -> None:

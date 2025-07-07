@@ -25,7 +25,11 @@ class ChanDatasetManager:
             return self.datasets_cache[cache_key]
             
         # 加载训练集
-        train_file = f"{dataset_name}_BTC_USDT_1h_train.json"
+        # 如果调用方直接传入的是文件名(包含.json)，则不再拼接后缀；否则默认仅拼接 _train.json
+        if dataset_name.endswith('.json'):
+            train_file = dataset_name
+        else:
+            train_file = f"{dataset_name}_train.json"
         kline_data, metadata = self.loader.load_dataset(train_file)
         
         # 转换为DataFrame
@@ -40,7 +44,11 @@ class ChanDatasetManager:
         if cache_key in self.datasets_cache:
             return self.datasets_cache[cache_key]
             
-        val_file = f"{dataset_name}_BTC_USDT_1h_val.json"
+        # 同理，如果调用方传入完整文件名则直接使用
+        if dataset_name.endswith('.json'):
+            val_file = dataset_name
+        else:
+            val_file = f"{dataset_name}_val.json"
         kline_data, metadata = self.loader.load_dataset(val_file)
         df = self.loader.kline_data_to_dataframe(kline_data)
         

@@ -683,6 +683,9 @@ class ChanFeatureCalculator:
         labels_df.loc[labels_df['future_returns'] > threshold, 'direction'] = 1  # 上涨
         labels_df.loc[labels_df['future_returns'] < -threshold, 'direction'] = -1  # 下跌
         
+        # 三分类标签：0=下跌,1=横盘,2=上涨
+        labels_df['direction_3cls'] = labels_df['direction'] + 1
+        
         # 二分类标签
         labels_df['binary_direction'] = (labels_df['future_returns'] > 0).astype(int)
         
@@ -699,7 +702,7 @@ class ChanFeatureCalculator:
         """获取特征名称列表"""
         exclude_cols = [
             'open', 'high', 'low', 'close', 'volume', 'timestamp',
-            'future_returns', 'direction', 'binary_direction',
+            'future_returns', 'direction', 'direction_3cls', 'binary_direction',
             'future_volatility', 'high_volatility'
         ]
         feature_cols = [col for col in df.columns if col not in exclude_cols]

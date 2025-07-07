@@ -1,0 +1,38 @@
+{
+  "data_dir": "data/ml_datasets",
+  "dataset_name": "btc_swap_1h_swaponly",
+  "model_dir": "models/ablation_chan_only",
+  "log_dir": "logs/ablation_chan_only",
+  "target_column": "binary_direction",
+  "models": ["lgb", "xgb", "cat"],
+  "ensemble_method": "stacking",
+  "random_state": 42,
+  "feature_calc_version": "v2",
+  "feature_config": {
+    "basic": false,
+    "technical": false,
+    "volume": false,
+    "chan_theory": true,
+    "multi_timeframe": false,
+    "volatility": false,
+    "momentum": false,
+    "pattern": false
+  },
+  "model_params": {
+    "lgb": {
+      "num_leaves": 107,
+      "max_depth": 2,
+      "learning_rate": 0.07,
+      "feature_fraction": 0.793221170827609,
+      "bagging_fraction": 0.6235484260359628,
+      "bagging_freq": 1,
+      "min_child_samples": 323,
+      "min_child_weight": 0.0016808683292686042,
+      "reg_alpha": 4.878392120871905,
+      "reg_lambda": 0.723578648726878,
+      "num_iterations": 1600,
+      "num_threads": 1,
+      "force_row_wise": true
+    }
+  }
+} 

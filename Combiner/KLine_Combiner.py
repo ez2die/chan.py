@@ -1,3 +1,6 @@
+# For Python <3.11 compatibility
+from __future__ import annotations
+
 from typing import Generic, Iterable, List, Optional, Self, TypeVar, Union, overload
 
 from Common.cache import make_cache
